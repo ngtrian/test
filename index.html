@@ -1,0 +1,75 @@
+<!-- List item to open video -->
+
+<ul class="list">
+    <li data="1" class="th1">TH 1</li>
+    <li data="2" class="th2">TH 2</li>
+    <li data="3" class="th3">TH 3</li>
+    <li data="4" class="th4">TH 4</li>
+    <li data="5" class="th5">TH 5</li>
+</ul>
+
+<video class="video" width="100%" height="auto" preload="auto" data-id="1" data-time1="9.92" data-time2="13.26">
+    <source src="th1.mp4" type="video/mp4">
+</video>
+
+<!-- user bookmark -->
+<div id="bookmark" class="list-item">
+    <ul class="list"></ul>
+</div>
+
+<!-- Click to save item in class list to .bookmark -->
+<button class="save" type="button"></button>
+
+<script>
+var list = document.querySelectorAll(".list li");
+
+function loadVideo() {
+const currentItem = document.querySelector(".list li.selected");
+let previousItem = currentItem;
+let idTH = 1;
+    list.forEach(function (item) {
+        item.addEventListener("click", function () {
+            idTH = item.getAttribute("data");
+            imggoiy.setAttribute("src", "https://raw.githubusercontent.com/ngtrian/video/n/image/" + idTH + ".webp");
+            video.setAttribute("data-time1", tinhhuong[idTH]["time1"]);
+            video.setAttribute("data-time2", tinhhuong[idTH]["time2"]);
+            video.setAttribute("data-id", idTH);
+            resetFlag();
+            //Title video tinhhuong
+            titleId.innerHTML = idTH;
+            titleText.innerHTML = tinhhuong[idTH]["title"];
+            titleText.style.display = "none"; //Hide on load
+            titleButton.style.display = "inline"; //Show button on load
+
+            if (previousItem) {
+                previousItem.classList.remove("selected");
+            }
+            previousItem = item;
+            item.classList.add("selected");
+
+            const source = video.querySelector("source");
+            source.setAttribute("src", "https://raw.githubusercontent.com/phonex34/kvideo2/master/video/th" + idTH + ".mp4");
+            let videoLoaded = false;
+            video.load();
+            video.addEventListener("canplaythrough", function () {
+                playVideo();
+            });
+            timeScore();
+        });
+    });
+}
+loadVideo();
+
+function addBookmark() {
+    const data = video.dataset.id;
+    const li = `<li data="${data}" class="th${data}">TH ${data}</li>`;
+    // Kiểm tra xem đã có li với data tương ứng chưa
+    const existLi = bookmark.querySelector(`li[data="${data}"]`);
+    if (!existLi) {
+        bookmark.insertAdjacentHTML("beforeend", li);
+    }
+    var list = document.querySelectorAll(".list li");
+    loadVideo();
+}
+save.addEventListener("click", addBookmark);
+</script>
